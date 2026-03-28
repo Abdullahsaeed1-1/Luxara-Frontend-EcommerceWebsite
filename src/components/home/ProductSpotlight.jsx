@@ -1,64 +1,92 @@
 import React from 'react';
-import { ArrowRight, Star } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
+
+const imageVariants = {
+  hidden: { opacity: 0, x: -80 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.9, ease: [0.22, 1, 0.36, 1] },
+  },
+};
+
+const textVariants = {
+  hidden: { opacity: 0, x: 60 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.9, delay: 0.15, ease: [0.22, 1, 0.36, 1] },
+  },
+};
 
 const ProductSpotlight = () => {
   return (
-    <section className="py-24 bg-white overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col lg:flex-row items-center gap-16">
-          
-          {/* Left: Image Composition */}
-          <div className="w-full lg:w-1/2 relative">
-            <div className="aspect-square bg-gray-100 overflow-hidden relative z-10">
-              <img 
-                src="https://images.unsplash.com/photo-1602751584552-8ba420555307?q=80&w=1000&auto=format&fit=crop" 
-                alt="Obsidian Bracelet" 
-                className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
-              />
-            </div>
-            {/* Decoration Box behind image */}
-            <div className="absolute -bottom-6 -right-6 w-full h-full border-2 border-yellow-600/30 -z-0 hidden md:block"></div>
-          </div>
-
-          {/* Right: Product Details */}
-          <div className="w-full lg:w-1/2 space-y-8">
-            <div className="flex items-center gap-2 text-yellow-500">
-              <Star size={16} fill="currentColor" />
-              <Star size={16} fill="currentColor" />
-              <Star size={16} fill="currentColor" />
-              <Star size={16} fill="currentColor" />
-              <Star size={16} fill="currentColor" />
-              <span className="text-gray-400 text-sm ml-2">(128 Reviews)</span>
-            </div>
-            
-            <h2 className="text-4xl md:text-5xl font-serif text-primary leading-tight">
-              The Midnight <br/> Obsidian.
-            </h2>
-            
-            <p className="text-gray-500 text-lg leading-relaxed">
-              Black Obsidian is a powerful cleanser of psychic smog created within your aura, and is a strong psychic protection stone. Hand-strung on durable elastic for a comfortable fit.
-            </p>
-
-            <div className="flex gap-8 border-y border-gray-100 py-6">
-              <div>
-                <span className="block text-gray-400 text-xs uppercase tracking-widest">Bead Size</span>
-                <span className="font-medium text-lg">8mm</span>
+    <section className="bg-neutral-950 px-4 py-24 sm:px-6 lg:px-8 lg:py-32">
+      <div className="mx-auto grid max-w-7xl items-center gap-14 rounded-[2rem] border border-white/10 bg-white/5 p-6 backdrop-blur-md shadow-[0_30px_100px_rgba(0,0,0,0.45)] lg:grid-cols-2 lg:gap-20 lg:p-10">
+        <motion.div
+          variants={imageVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-50px' }}
+          className="relative"
+        >
+          <div className="aspect-[4/5] overflow-hidden rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_top,rgba(251,191,36,0.12),rgba(255,255,255,0.04)_35%,rgba(10,10,10,0.9)_100%)] shadow-[0_25px_80px_rgba(0,0,0,0.4)]">
+            <div className="flex h-full w-full items-center justify-center bg-[linear-gradient(145deg,rgba(255,255,255,0.09),rgba(255,255,255,0.03),rgba(255,255,255,0.02))] p-8 sm:p-12">
+              <div className="relative h-full w-full rounded-[1.5rem] border border-white/10 bg-[linear-gradient(145deg,rgba(255,255,255,0.08),rgba(255,255,255,0.02),rgba(10,10,10,0.35))]">
+                <div className="absolute left-1/2 top-[18%] h-32 w-32 -translate-x-1/2 rounded-full border border-white/30" />
+                <div className="absolute left-1/2 top-[31%] h-40 w-40 -translate-x-1/2 rounded-full border border-white/20" />
+                <div className="absolute left-1/2 top-[46%] h-52 w-52 -translate-x-1/2 rounded-full border border-white/10" />
+                <div className="absolute inset-x-[18%] bottom-[14%] h-px bg-gradient-to-r from-transparent via-white/50 to-transparent" />
+                <div className="absolute inset-x-[28%] bottom-[20%] h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
               </div>
-              <div>
-                <span className="block text-gray-400 text-xs uppercase tracking-widest">Material</span>
-                <span className="font-medium text-lg">Volcanic Glass</span>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-6 pt-4">
-              <h3 className="text-3xl font-bold text-gray-900">$45.00</h3>
-              <button className="flex-1 bg-black text-white h-14 uppercase tracking-widest text-xs font-bold hover:bg-yellow-600 transition-colors flex items-center justify-center gap-2">
-                Add to Cart <ArrowRight size={16} />
-              </button>
             </div>
           </div>
 
-        </div>
+          <div className="pointer-events-none absolute -bottom-5 -right-5 hidden h-full w-full rounded-[2rem] border border-white/10 lg:block" />
+        </motion.div>
+
+        <motion.div
+          variants={textVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-50px' }}
+          className="max-w-xl"
+        >
+          <span className="mb-5 inline-block text-[0.7rem] font-medium uppercase tracking-[0.35em] text-amber-300">
+            Curated Luxury
+          </span>
+
+          <h2 className="text-4xl font-semibold tracking-tight text-white sm:text-5xl lg:text-6xl">
+            The Signature Collection
+          </h2>
+
+          <p className="mt-6 text-base leading-8 text-neutral-400 sm:text-lg">
+            A refined expression of modern jewelry — sculpted with clean lines,
+            subtle brilliance, and a timeless sense of elegance. Designed for
+            those who appreciate quiet luxury in every detail.
+          </p>
+
+          <div className="mt-10 flex flex-col items-start gap-5 sm:flex-row sm:items-center sm:gap-6">
+            <motion.div whileHover={{ scale: 1.02, y: -5 }} whileTap={{ scale: 0.98 }}>
+              <Link
+                to="/shop"
+                className="group inline-flex items-center gap-3 rounded-full border border-white/10 bg-white px-7 py-3.5 text-sm font-medium uppercase tracking-[0.22em] text-black transition-all duration-300 hover:bg-amber-400 hover:text-black shadow-[0_10px_35px_rgba(255,255,255,0.1)]"
+              >
+                Explore Now
+                <ArrowRight
+                  size={16}
+                  className="transition-transform duration-300 group-hover:translate-x-1"
+                />
+              </Link>
+            </motion.div>
+
+            <span className="text-xs uppercase tracking-[0.35em] text-neutral-500">
+              Minimal. Rare. Enduring.
+            </span>
+          </div>
+        </motion.div>
       </div>
     </section>
   );

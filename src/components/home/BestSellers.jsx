@@ -1,97 +1,170 @@
-import React from 'react';
-import { ShoppingBag, Eye } from 'lucide-react';
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { ShoppingBag, Eye, Check, ArrowRight } from 'lucide-react';
+import { useCart } from '../../context/CartContext';
+import QuickView from '../QuickView';
+import { BEST_SELLERS } from '../../data/products';
 
-const products = [
-  {
-    id: 1,
-    name: "Volcanic Lava Set",
-    price: "Rs. 2,450",
-    image: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?q=80&w=1000&auto=format&fit=crop",
-    tag: "Best Seller"
-  },
-  {
-    id: 2,
-    name: "Rose Quartz Healing",
-    price: "Rs. 1,800",
-    image: "https://images.unsplash.com/photo-1573408301185-9146fe634ad0?q=80&w=1000&auto=format&fit=crop",
-    tag: "New"
-  },
-  {
-    id: 3,
-    name: "Tiger Eye Classic",
-    price: "Rs. 2,100",
-    image: "https://images.unsplash.com/photo-1602751584552-8ba420555307?q=80&w=1000&auto=format&fit=crop",
-    tag: "Trending"
-  },
-  {
-    id: 4,
-    name: "Ocean Jasper Stack",
-    price: "Rs. 3,200",
-    image: "https://images.unsplash.com/photo-1599643478518-17488fbbcd75?q=80&w=1000&auto=format&fit=crop",
-    tag: "Limited"
+const containerVariants = {
+  hidden: {},
+  show: {
+    transition: {
+      staggerChildren: 0.1
+    }
   }
-];
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 40 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.7,
+      ease: 'easeOut'
+    }
+  }
+};
+
+const ProductCard = ({ product, onQuickView }) => {
+  const { addToCart } = useCart();
+  const [added, setAdded] = useState(false);
+
+  const handleAdd = (e) => {
+    e.stopPropagation();
+    if (!product.inStock) return;
+    addToCart(product);
+    setAdded(true);
+    setTimeout(() => setAdded(false), 2000);
+  };
+
+  return (
+    <motion.div
+      variants={itemVariants}
+      whileHover={{ scale: 1.02, y: -5 }}
+      transition={{ duration: 0.35, ease: 'easeOut' }}
+      className="group cursor-pointer"
+    >
+      <div className="overflow-hidden rounded-[28px] border border-white/10 bg-white/5 p-3 shadow-[0_24px_80px_rgba(0,0,0,0.35)] backdrop-blur-md">
+        <div className="relative mb-5 overflow-hidden rounded-2xl border border-white/10 bg-neutral-900 aspect-[3/4]">
+          <span className="absolute left-3 top-3 z-10 rounded-full border border-white/10 bg-black/45 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.28em] text-amber-300 backdrop-blur-md">
+            {product.tag}
+          </span>
+
+          <img
+            src={product.image}
+            alt={product.name}
+            className="h-full w-full object-cover transition duration-700 ease-in-out group-hover:scale-110"
+          />
+
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-70 transition-opacity duration-300 group-hover:opacity-100" />
+
+          <div className="absolute inset-x-4 bottom-4 flex items-center justify-center gap-3 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 translate-y-4">
+            <button
+              onClick={handleAdd}
+              title={added ? 'Added!' : 'Add to Cart'}
+              className={`flex items-center gap-2 rounded-full border px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.22em] transition-all shadow-lg ${
+                added
+                  ? 'border-emerald-400/30 bg-emerald-500 text-white'
+                  : 'border-white/10 bg-white text-neutral-900 hover:bg-amber-400 hover:text-neutral-950'
+              }`}
+            >
+              {added ? <Check size={16} /> : <ShoppingBag size={16} />}
+              <span>{added ? 'Added' : 'Add'}</span>
+            </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onQuickView(product);
+              }}
+              title="Quick View"
+              className="rounded-full border border-white/10 bg-black/50 p-3 text-white backdrop-blur-md transition-all hover:bg-white hover:text-neutral-900 shadow-lg"
+            >
+              <Eye size={16} />
+            </button>
+          </div>
+        </div>
+
+        <div className="px-1 pb-1 text-center">
+          <p className="mb-2 text-[10px] font-medium uppercase tracking-[0.3em] text-amber-300/85">
+            {product.category} · {product.finish}
+          </p>
+          <h3 className="text-base font-serif font-medium leading-snug text-white transition-colors group-hover:text-amber-200 md:text-lg">
+            {product.name}
+          </h3>
+          {product.description && (
+            <p className="mx-auto mt-2 max-w-xs text-sm leading-6 text-neutral-400">
+              {product.description}
+            </p>
+          )}
+          <div className="mt-3 flex items-center justify-center gap-2">
+            <p className="text-sm font-semibold text-white">
+              Rs. {product.price.toLocaleString()}
+            </p>
+            {product.originalPrice && (
+              <p className="text-xs text-neutral-500 line-through">
+                Rs. {product.originalPrice.toLocaleString()}
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+};
 
 const BestSellers = () => {
+  const [quickProduct, setQuickProduct] = useState(null);
+
   return (
-    <section className="py-24 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* Header */}
-        <div className="text-center mb-16">
-          <p className="text-yellow-600 uppercase tracking-widest text-xs font-bold mb-2">Shop The Look</p>
-          <h2 className="text-4xl font-serif text-primary">Seasonal Favorites</h2>
-        </div>
-
-        {/* Product Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
-          {products.map((product) => (
-            <div key={product.id} className="group cursor-pointer">
-              
-              {/* Image Container */}
-              <div className="relative overflow-hidden aspect-[3/4] mb-4 bg-gray-100">
-                <span className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-3 py-1 text-[10px] uppercase tracking-widest font-bold z-10">
-                  {product.tag}
-                </span>
-                
-                <img 
-                  src={product.image} 
-                  alt={product.name} 
-                  className="w-full h-full object-cover transform group-hover:scale-110 transition duration-700 ease-in-out"
-                />
-
-                {/* Hover Buttons */}
-                <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-2">
-                  <button className="bg-white p-3 rounded-full hover:bg-yellow-600 hover:text-white transition-all transform translate-y-4 group-hover:translate-y-0">
-                    <ShoppingBag size={20} />
-                  </button>
-                  <button className="bg-white p-3 rounded-full hover:bg-black hover:text-white transition-all transform translate-y-4 group-hover:translate-y-0 delay-75">
-                    <Eye size={20} />
-                  </button>
-                </div>
-              </div>
-
-              {/* Info */}
-              <div className="text-center">
-                <h3 className="text-lg font-serif font-medium text-gray-900 group-hover:text-yellow-600 transition-colors">
-                  {product.name}
-                </h3>
-                <p className="text-gray-500 text-sm mt-1">{product.price}</p>
-              </div>
-
+    <>
+      <section className="relative overflow-hidden bg-neutral-950 py-24 sm:py-28">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(212,175,55,0.10),transparent_26%),radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.05),transparent_24%)]" />
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <motion.div
+            className="mb-14 flex flex-col gap-6 md:mb-16 md:flex-row md:items-end md:justify-between"
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-50px' }}
+            transition={{ duration: 0.8, ease: 'easeOut' }}
+          >
+            <div className="max-w-2xl">
+              <p className="mb-3 inline-flex rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.35em] text-amber-300/90 backdrop-blur-md">
+                Shop The Look
+              </p>
+              <h2 className="text-4xl font-serif text-white md:text-5xl">
+                Seasonal Favorites
+              </h2>
+              <p className="mt-4 text-sm leading-7 text-neutral-400 md:text-base">
+                Discover pieces our collectors return to again and again, selected for everyday elegance and elevated gifting.
+              </p>
             </div>
-          ))}
-        </div>
 
-        {/* View All Button */}
-        <div className="text-center mt-12">
-          <button className="border-b border-black pb-1 text-sm uppercase tracking-widest hover:text-yellow-600 hover:border-yellow-600 transition-colors">
-            View All Products
-          </button>
-        </div>
+            <a
+              href="/shop"
+              className="inline-flex items-center gap-2 self-start rounded-full border border-white/10 bg-white/5 px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.28em] text-white transition-all duration-300 hover:border-amber-300/30 hover:bg-white hover:text-neutral-950 hover:shadow-[0_0_30px_rgba(212,175,55,0.16)] backdrop-blur-md md:self-auto"
+            >
+              View All
+              <ArrowRight size={15} />
+            </a>
+          </motion.div>
 
-      </div>
-    </section>
+          <motion.div
+            className="grid grid-cols-2 gap-5 sm:grid-cols-2 lg:grid-cols-4 md:gap-7"
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: '-50px' }}
+          >
+            {BEST_SELLERS.map((product) => (
+              <ProductCard key={product.id} product={product} onQuickView={setQuickProduct} />
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      <QuickView product={quickProduct} onClose={() => setQuickProduct(null)} />
+    </>
   );
 };
 
