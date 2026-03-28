@@ -3,11 +3,39 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+  <!-- ================================================
+    TITLE — yeh browser tab mein dikhta hai
+    Change karna ho → sirf yahan text edit karo
+  ================================================ -->
   <title>Luxara</title>
 
-  <!-- Fonts & icons -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- ================================================
+    FAVICON — tab mein chhota icon
+    
+    Kaise kaam karta hai:
+    - /logo.png  → matlab public/logo.png file
+    - public/ folder mein apna logo.png daalo
+    - Vite automatically public/ folder ko root pe serve karta hai
+    
+    Agar logo ka naam alag hai → href="/apna-file-naam.png" karo
+  ================================================ -->
+  <link rel="icon" type="image/png" href="public/logo.png" />
+
+  <!-- Apple devices ke liye (iPhone home screen icon) -->
+  <link rel="apple-touch-icon" href="public/logo.png" />
+
+  <!-- Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:wght@600&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Font Awesome Icons -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
 
 </head>
 <body>
