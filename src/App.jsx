@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { CartProvider } from './context/CartContext';
 import ScrollToTop from './components/ScrollToTop';
+import Chatbot from './components/Chatbot';
 
 // Pages
 import Home from './pages/Home';
@@ -37,6 +38,7 @@ function App() {
           {/* 404 fallback */}
           <Route path="*" element={<Home />} />
         </Routes>
+        <Chatbot />
       </Router>
     </CartProvider>
   );
